@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MuziekDownloader</title>
+</head>
+<body>
+    Video: <br>
+    {% if entry %}
+        <iframe src="https://youtube.com/embed/{{ entry.song_identifier }}"
+        width="560" height="315" allowfullscreen></iframe>
+    {% elif song_identifier %}
+        <iframe src="https://youtube.com/embed/{{ song_identifier }}"
+        width="560" height="315" allowfullscreen></iframe>
+    {% endif %}
+    <br>
+
+    <form action="{% url 'download' %}" method="post">
+        {% csrf_token %}
+        {% if entry %}
+            <label>
+                Song id:
+                <input type="text" name="song_identifier" readonly required value="{{ entry.song_identifier }}">
+            </label>
+            <label>
+                Title:
+                <input type="text" name="track_title" value="{{ entry.track_title }}">
+            </label>
+            <label>
+                Author:
+                <input type="text" name="artist" value="{{ entry.artist }}">
+            </label>
+            <label>
+                Album:
+                <input type="text" name="album" value="{{ entry.album }}">
+            </label>
+            <label>
+                Artwork url:
+                <input type="text" name="artwork_url" value="{{ entry.artwork_url }}">
+            </label>
+            <label>
+                Track number:
+                <input type="text" name="track_number" value="{{ entry.track_number }}">
+            </label>
+            <label>
+                Total tracks:
+                <input type="text" name="total_tracks" value="{{ entry.total_tracks }}">
+            </label>
+            <label>
+                Year of release:
+                <input type="text" name="year" value="{{ entry.year }}">
+            </label>
+        {% elif song_identifier %}
+            <label>
+                Song id:
+                <input type="text" name="song_identifier" readonly required value="{{ song_identifier }}">
+            </label>
+            <label>
+                Title:
+                <input type="text" name="track_title">
+            </label>
+            <label>
+                Author:
+                <input type="text" name="artist">
+            </label>
+            <label>
+                Album:
+                <input type="text" name="album">
+            </label>
+            <label>
+                Artwork url:
+                <input type="text" name="artwork_url">
+            </label>
+            <label>
+                Track number:
+                <input type="text" name="track_number">
+            </label>
+            <label>
+                Total tracks:
+                <input type="text" name="total_tracks">
+            </label>
+            <label>
+                Year of release:
+                <input type="text" name="year">
+            </label>
+        {% endif %}
+        <input type="submit" value="Download">
+    </form>
+</body>
+</html>

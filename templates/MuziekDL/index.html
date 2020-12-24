@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MuziekDownloader</title>
+</head>
+<body>
+
+<form action="{% url 'parse_id' %}" method="post">
+    {% csrf_token %}
+    <label>
+        Song URL:
+        <input type="text" name="search" required>
+    </label>
+    <input type="submit" value="Search">
+</form>
+
+{% if latest_songs_list %}
+    Latest songs added:
+    <ul>
+    {% for song in latest_songs_list %}
+        <li><a href="{% url 'form_id' song.id %}">{{ song.track_title }} - {{ song.artist }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No songs have been entered yet.</p>
+{% endif %}
+
+</body>
+</html>
