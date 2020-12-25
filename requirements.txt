@@ -2,3 +2,5 @@ asgiref
 Django
 pytz
 sqlparse
+youtube_dl
+music_tag
