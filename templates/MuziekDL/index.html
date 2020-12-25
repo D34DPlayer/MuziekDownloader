@@ -6,10 +6,18 @@
 </head>
 <body>
 
+<form method="GET" action="{% url "search" %}">
+    <label>
+        Search for a song in our library:
+        <input name="search" type="text" placeholder="Search term">
+    </label>
+    <input type="submit" value="Search">
+</form>
+
 <form action="{% url 'parse_id' %}" method="post">
     {% csrf_token %}
     <label>
-        Song URL:
+        Or add it yourself from a YoutTube URL:
         <input type="text" name="search" required>
     </label>
     <input type="submit" value="Search">

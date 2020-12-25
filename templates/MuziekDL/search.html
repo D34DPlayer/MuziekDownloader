@@ -14,7 +14,7 @@
     </form>
     {% if entry_list %}
         {% for entry in entry_list %}
-            {{ entry }} <br>
+            <a href="{% url "form_id" entry.id %}">{{ entry }}</a> <br>
         {% endfor %}
     {% endif %}
 </body>
