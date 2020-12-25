@@ -9,7 +9,7 @@ urlpatterns = [
     path('download/', views.dl_add_entry, name='download'),
     path('<int:entry_id>/download/', views.dl_entry, name='download_entry'),
     path('parse/', views.parse_identifier, name='parse_id'),
-    path('search/', views.search, name="search"),
+    path('search/', views.SearchResultsView.as_view(), name="search"),
     # AJAX
     path('<int:entry_id>/ajax/start_download', views.ajax_start_download, name="ajax_start_download"),
     path('<int:entry_id>/ajax/status', views.ajax_get_download_progress, name="ajax_status"),

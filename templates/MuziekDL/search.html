@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form method="GET" action="{% url "search" %}">
+        <label>
+            Search:
+            <input name="search" type="text" placeholder="Search term">
+        </label>
+        <input type="submit" value="Search">
+    </form>
+    {% if entry_list %}
+        {% for entry in entry_list %}
+            {{ entry }} <br>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>

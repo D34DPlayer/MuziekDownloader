@@ -3,9 +3,11 @@ import os
 
 from django.views.static import serve
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, Http404, HttpResponseRedirect, JsonResponse
+from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.utils import timezone
+from django.views.generic import ListView
+from django.db.models import Q
 
 from .models import SongEntry
 from .libs.downloader import SongDownloader
@@ -40,11 +42,18 @@ def dl_add_entry(request):
         raise Http404(f"No song identifier was provided.")
     entry = SongEntry(song_identifier=request.POST["song_identifier"], add_date=timezone.now())
 
-    for key in keys:
-        _entry_from_post(entry, request.POST, key)
+    old_entry = None
+    if 'entry_id' in request.POST:
+        old_entry = _get_object_or_none(SongEntry, pk=request.POST["entry_id"])
 
-    entry.save()
-    return HttpResponseRedirect(reverse('download_entry', args=(entry.id,)))
+    duplicate = [_entry_from_post(entry, request.POST, key, old_entry) for key in keys]
+
+    if all(duplicate):
+        del entry
+        return HttpResponseRedirect(reverse('download_entry', args=(old_entry.id,)))
+    else:
+        entry.save()
+        return HttpResponseRedirect(reverse('download_entry', args=(entry.id,)))
 
 
 def parse_identifier(request):
@@ -64,8 +73,18 @@ def dl_entry(request, entry_id):
     return render(request, "MuziekDL/download_action.html", {"entry": entry})
 
 
-def search(request):
-    return HttpResponse("You're at the section where metadata will be searched.")
+class SearchResultsView(ListView):
+    model = SongEntry
+    template_name = 'MuziekDL/search.html'
+    context_object_name = 'entry_list'
+
+    def get_queryset(self):
+        search = self.request.GET["search"] if "search" in self.request.GET else ""
+        return SongEntry.objects.filter(
+            Q(track_title__icontains=search) |
+            Q(genre__icontains=search) |
+            Q(artist__icontains=search)
+        )
 
 
 # AJAX HANDLING
@@ -113,9 +132,13 @@ def ajax_download_link(request, entry_id):
 
 
 # UTILS
-def _entry_from_post(entry, post, key):
+def _entry_from_post(entry, post, key, old_entry=None):
     if key in post:
         setattr(entry, key, post[key])
+
+    if old_entry:
+        return post[key] == str(getattr(old_entry, key))
+    return False
 
 
 def _get_object_or_none(model, **kwargs):
