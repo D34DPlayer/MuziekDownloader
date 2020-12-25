@@ -50,6 +50,10 @@
                 Year of release:
                 <input type="text" name="year" value="{{ entry.year }}">
             </label>
+            <label>
+                Genre:
+                <input type="text" name="genre" value="{{ entry.genre }}">
+            </label>
         {% elif song_identifier %}
             <label>
                 Song id:
@@ -82,6 +86,10 @@
             <label>
                 Year of release:
                 <input type="text" name="year">
+            </label>
+            <label>
+                Genre:
+                <input type="text" name="genre">
             </label>
         {% endif %}
         <input type="submit" value="Download">

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MuziekDownloader</title>
+</head>
+<body>
+    Info:
+    <p>Title: {{ entry.track_title }}</p>
+    <p>Artist: {{ entry.artist }}</p>
+    <p>Album: {{ entry.album }}</p>
+    <p>Genre: {{ entry.genre }}</p>
+    <p>Artwork: {{ entry.artwork_url }}</p>
+    <p>Track number: {{ entry.track_number }}</p>
+    <p>Total tracks: {{ entry.total_tracks }}</p>
+    <p>Year of release: {{ entry.year }}</p>
+
+    <button onclick="startDownload();" id="start">Start download</button>
+    <button disabled onclick="download();" id="download">Download file</button>
+
+    <script>
+        async function ajaxQuery() {
+            let req = await fetch("{% url "ajax_status" entry.id %}");
+            let info = await req.json();
+
+            if (info.success === 1) {
+                switch (info.dl_status) {
+                    case 1 :
+                        document.getElementById("start").disabled = true;
+                        document.getElementById("start").innerHTML = "Processing...";
+                        break;
+                    case -1:
+                        document.getElementById("start").disabled = true;
+                        document.getElementById("start").innerHTML = "ERROR";
+                        return;
+                    case 2:
+                        document.getElementById("start").disabled = true;
+                        document.getElementById("start").innerHTML = "DONE";
+                        document.getElementById("download").disabled = false;
+                        return;
+                    case 0:
+                        document.getElementById("start").disabled = false;
+                        document.getElementById("start").innerHTML = "Start download";
+                        break;
+                }
+                setTimeout(ajaxQuery, 1000);
+            }
+        }
+        async function startDownload() {
+            let req = await fetch("{% url "ajax_start_download" entry.id %}");
+            let info = req.json();
+            if (!info.success) {
+                document.getElementById("start").disabled = true;
+                document.getElementById("start").innerHTML = "ERROR";
+            }
+        }
+        function download() {
+            let anchor = document.createElement('a');
+            anchor.href = "{% url "ajax_download" entry.id %}";
+            anchor.target = '_blank';
+            anchor.download = "{{ entry.id }}.mp3";
+            anchor.click();
+        }
+        ajaxQuery();
+    </script>
+</body>
+</html>
