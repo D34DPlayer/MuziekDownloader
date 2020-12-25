@@ -28,3 +28,13 @@ class SongEntry(models.Model):
     dl_file = models.FilePathField(path=settings.SONGS_PATH, blank=True, null=True)
     dl_error = models.CharField(max_length=64, blank=True)
 
+    def __str__(self):
+        if not (self.artist or self.track_title):
+            return f"Entry {self.id}"
+        else:
+            name = self.track_title or "???"
+            group = self.artist or "???"
+            return f"{name} - {group}"
+
+    class Meta:
+        verbose_name_plural = "SongEntries"

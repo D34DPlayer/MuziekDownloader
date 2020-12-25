@@ -19,8 +19,12 @@
         {% csrf_token %}
         {% if entry %}
             <label>
+                Entry id:
+                <input type="text" name="entry_id" hidden required value="{{ entry.id }}">
+            </label>
+            <label>
                 Song id:
-                <input type="text" name="song_identifier" readonly required value="{{ entry.song_identifier }}">
+                <input type="text" name="song_identifier" hidden required value="{{ entry.song_identifier }}">
             </label>
             <label>
                 Title:
@@ -57,7 +61,7 @@
         {% elif song_identifier %}
             <label>
                 Song id:
-                <input type="text" name="song_identifier" readonly required value="{{ song_identifier }}">
+                <input type="text" name="song_identifier" hidden required value="{{ song_identifier }}">
             </label>
             <label>
                 Title:

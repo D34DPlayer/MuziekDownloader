@@ -43,12 +43,12 @@
                         document.getElementById("start").innerHTML = "Start download";
                         break;
                 }
-                setTimeout(ajaxQuery, 1000);
+                setTimeout(ajaxQuery, 3000);
             }
         }
         async function startDownload() {
             let req = await fetch("{% url "ajax_start_download" entry.id %}");
-            let info = req.json();
+            let info = await req.json();
             if (!info.success) {
                 document.getElementById("start").disabled = true;
                 document.getElementById("start").innerHTML = "ERROR";
