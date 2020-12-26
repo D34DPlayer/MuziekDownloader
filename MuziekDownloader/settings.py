@@ -1,3 +1,5 @@
+import os
+
 """
 Django settings for MuziekDownloader project.
 
@@ -23,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'q6+8-(4-1a#(@$h&4+8ov9qhsc&69y7+(%v+^tzp2*ej_-dnfo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -55,8 +57,7 @@ ROOT_URLCONF = 'MuziekDownloader.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -158,3 +159,8 @@ LOGGING = {
         }
     }
 }
+
+# Configure Django App for Heroku.
+if os.environ.get('HEROKU'):
+    import django_heroku
+    django_heroku.settings(locals())

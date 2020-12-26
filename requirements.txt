@@ -4,3 +4,5 @@ pytz
 sqlparse
 youtube_dl
 music_tag
+django_heroku
+gunicorn
