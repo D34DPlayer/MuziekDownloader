@@ -2,7 +2,7 @@ import os
 
 from django.apps import AppConfig
 from django.conf import settings
-from django.db.utils import OperationalError
+from django.db.utils import DatabaseError
 
 
 class MuziekdlConfig(AppConfig):
@@ -17,5 +17,5 @@ class MuziekdlConfig(AppConfig):
 
         try:
             self.get_model("SongEntry").objects.all().update(dl_status=0)
-        except OperationalError:
+        except DatabaseError:
             pass
