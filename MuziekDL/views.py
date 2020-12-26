@@ -79,7 +79,7 @@ class SearchResultsView(ListView):
     context_object_name = 'entry_list'
 
     def get_queryset(self):
-        search = self.request.GET["search"] if "search" in self.request.GET else ""
+        search = self.request.GET.get("search", default="")
         return SongEntry.objects.filter(
             Q(track_title__icontains=search) |
             Q(genre__icontains=search) |
@@ -133,11 +133,12 @@ def ajax_download_link(request, entry_id):
 
 # UTILS
 def _entry_from_post(entry, post, key, old_entry=None):
-    if key in post:
+    value = post.get(key, default="")
+    if value != "":
         setattr(entry, key, post[key])
 
     if old_entry:
-        return post[key] == str(getattr(old_entry, key))
+        return value == str(getattr(old_entry, key))
     return False
 
 

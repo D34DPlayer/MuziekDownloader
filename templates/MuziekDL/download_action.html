@@ -1,23 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>MuziekDownloader</title>
-</head>
-<body>
-    Info:
-    <p>Title: {{ entry.track_title }}</p>
-    <p>Artist: {{ entry.artist }}</p>
-    <p>Album: {{ entry.album }}</p>
-    <p>Genre: {{ entry.genre }}</p>
-    <p>Artwork: {{ entry.artwork_url }}</p>
-    <p>Track number: {{ entry.track_number }}</p>
-    <p>Total tracks: {{ entry.total_tracks }}</p>
-    <p>Year of release: {{ entry.year }}</p>
+{%  extends 'MuziekDL/default_template.html' %}
 
-    <button onclick="startDownload();" id="start">Start download</button>
-    <button disabled onclick="download();" id="download">Download file</button>
+{% block content %}
+    <div class="section">
+        <div class="container">
+            <h4 class="header center"> Info: </h4>
+            <div class="row">
+                Title: {{ entry.track_title }}
+            </div>
+            <div class="row">
+                Album: {{ entry.album }}
+            </div>
+            <div class="row">
+                Genre: {{ entry.genre }}
+            </div>
+            <div class="row">
+                Artwork: {{ entry.artwork_url }}
+            </div>
+            <div class="row">
+                <div class="col s6">
+                    Track number: {{ entry.track_number }}
+                </div>
+                <div class="col s6">
+                    Track number: {{ entry.track_number }}
+                </div>
+            </div>
+            <div class="row">
+                Year of release: {{ entry.year }}
+            </div>
+            <div class="row center">
+                <button class="waves-effect waves-light btn-large" onclick="startDownload();" id="start">Start download</button>
+                <button class="waves-effect waves-light btn-large" disabled onclick="download();" id="download">Download file</button>
+            </div>
+            <div class="progress" id="progress">
+                <div class="indeterminate"></div>
+            </div>
+        </div>
+    </div>
 
+
+{% endblock %}
+
+{% block js %}
     <script>
         async function ajaxQuery() {
             let req = await fetch("{% url "ajax_status" entry.id %}");
@@ -28,15 +51,18 @@
                     case 1 :
                         document.getElementById("start").disabled = true;
                         document.getElementById("start").innerHTML = "Processing...";
+                        document.getElementById("progress").style.display = "block";
                         break;
                     case -1:
                         document.getElementById("start").disabled = true;
                         document.getElementById("start").innerHTML = "ERROR";
+                        document.getElementById("progress").style.display = "none";
                         return;
                     case 2:
                         document.getElementById("start").disabled = true;
                         document.getElementById("start").innerHTML = "DONE";
                         document.getElementById("download").disabled = false;
+                        document.getElementById("progress").style.display = "none";
                         return;
                     case 0:
                         document.getElementById("start").disabled = false;
@@ -62,6 +88,6 @@
             anchor.click();
         }
         ajaxQuery();
+        document.getElementById("progress").style.display = "none";
     </script>
-</body>
-</html>
+{% endblock %}

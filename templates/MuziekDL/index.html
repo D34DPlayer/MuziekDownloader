@@ -1,38 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>MuziekDownloader</title>
-</head>
-<body>
+{% extends 'MuziekDL/default_template.html' %}
 
-<form method="GET" action="{% url "search" %}">
-    <label>
-        Search for a song in our library:
-        <input name="search" type="text" placeholder="Search term">
-    </label>
-    <input type="submit" value="Search">
-</form>
+{% block content %}
+    <div class="section">
+        <div class="container">
+            <h2 class="header center">Enter an URL</h2>
+            <form action="{% url 'parse_id' %}" method="post" class="row center">
+                {% csrf_token %}
+                <input id="search" type="search" name="search" required>
+                <button class="btn waves-effect waves-light" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
 
-<form action="{% url 'parse_id' %}" method="post">
-    {% csrf_token %}
-    <label>
-        Or add it yourself from a YoutTube URL:
-        <input type="text" name="search" required>
-    </label>
-    <input type="submit" value="Search">
-</form>
-
-{% if latest_songs_list %}
-    Latest songs added:
-    <ul>
-    {% for song in latest_songs_list %}
-        <li><a href="{% url 'form_id' song.id %}">{{ song.track_title }} - {{ song.artist }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No songs have been entered yet.</p>
-{% endif %}
-
-</body>
-</html>
+    <div class="section">
+        <div class="container">
+            {% if latest_songs_list %}
+                <ul class="collection with-header">
+                    <li class="collection-header"><h4>Latest songs added: </h4></li>
+                    {% for song in latest_songs_list %}
+                        <li class="collection-item">
+                            <a href="{% url 'form_id' song.id %}">
+                                {{ song }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <h4>No songs have been entered yet.</h4>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
