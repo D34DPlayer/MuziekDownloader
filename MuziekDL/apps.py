@@ -2,6 +2,7 @@ import os
 
 from django.apps import AppConfig
 from django.conf import settings
+from django.db.utils import OperationalError
 
 
 class MuziekdlConfig(AppConfig):
@@ -14,4 +15,7 @@ class MuziekdlConfig(AppConfig):
         else:
             os.mkdir(settings.SONGS_PATH)
 
-        self.get_model("SongEntry").objects.all().update(dl_status=0)
+        try:
+            self.get_model("SongEntry").objects.all().update(dl_status=0)
+        except OperationalError:
+            pass
