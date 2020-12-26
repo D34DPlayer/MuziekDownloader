@@ -1,0 +1,125 @@
+{% extends 'MuziekDL/default_template.html' %}
+
+{% block content %}
+    <div class="section">
+        <div class="container">
+            <h3 class="header center">Video</h3>
+            <div class="video-container">
+                {% if entry %}
+                    <iframe src="https://youtube.com/embed/{{ entry.song_identifier }}" allowfullscreen></iframe>
+                {% elif song_identifier %}
+                    <iframe src="https://youtube.com/embed/{{ song_identifier }}" allowfullscreen></iframe>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="container">
+            <form action="{% url 'download' %}" method="post" class="row s12">
+                {% csrf_token %}
+                {% if entry %}
+                    <input type="text" name="entry_id" hidden required value="{{ entry.id }}">
+                    <input type="text" name="song_identifier" hidden required value="{{ entry.song_identifier }}">
+
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" name="track_title" id="track_title" value="{{ entry.track_title }}">
+                            <label for="track_title">Title</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" name="artist" value="{{ entry.artist }}" id="artist">
+                            <label for="artist">Artist</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" name="album" value="{{ entry.album }}" id="album">
+                            <label for="album">Album</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" name="artwork_url" value="{{ entry.artwork_url }}" id="artwork_url">
+                            <label for="artwork_url">Artwork url</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input type="number" name="track_number" value="{{ entry.track_number }}" id="track_number">
+                            <label for="track_number">Track number</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input type="number" name="total_tracks" value="{{ entry.total_tracks }}" id="total_tracks">
+                            <label for="total_tracks">Total tracks</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" name="year" value="{{ entry.year }}" id="year">
+                            <label for="year">Year of release</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" name="genre" value="{{ entry.genre }}" id="genre">
+                            <label for="genre">Genre</label>
+                        </div>
+                    </div>
+                {% elif song_identifier %}
+                    <input type="text" name="song_identifier" hidden required value="{{ song_identifier }}">
+
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" name="track_title" id="track_title">
+                            <label for="track_title">Title</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" name="artist" id="artist">
+                            <label for="artist">Artist</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" name="album" id="album">
+                            <label for="album">Album</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" name="artwork_url" id="artwork_url">
+                            <label for="artwork_url">Artwork url</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input type="number" name="track_number" id="track_number">
+                            <label for="track_number">Track number</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input type="number" name="total_tracks" id="total_tracks">
+                            <label for="total_tracks">Total tracks</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" name="year" id="year">
+                            <label for="year">Year of release</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" name="genre" id="genre">
+                            <label for="genre">Genre</label>
+                        </div>
+                    </div>
+                {% endif %}
+                <button class="btn waves-effect waves-light" type="submit">Download</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

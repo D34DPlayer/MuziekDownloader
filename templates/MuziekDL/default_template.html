@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MuziekDownloader</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    {% block head %}
+
+    {% endblock %}
+    <!-- CSS -->
+    {% load static %}
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="{% static "MuziekDL/css/materialize.min.css" %}">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1 0 auto;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav class="grey darken-3" role="navigation">
+        <div class="grey darken-3 nav-wrapper container">
+            <a id="logo-container" href="/" class="brand-logo">MuziekDownloader</a>
+            <form method="GET" action="{% url "search" %}" class="right hide-on-med-and-down">
+                <div class="input-field">
+                    <input id="search" type="search" name="search" required>
+                    <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                    <i class="material-icons">close</i>
+                </div>
+            </form>
+        </div>
+    </nav>
+</header>
+
+<main>
+    {% block content %}
+
+    {% endblock %}
+</main>
+
+<footer class="page-footer black">
+    <div class="container">
+      <div class="row">
+        <div class="col l3 s12">
+          <h5 class="white-text">Source</h5>
+          <ul>
+            <li><a class="white-text" href="https://github.com/D34DPlayer/MuziekDownloader">GitHub</a></li>
+            <li><a class="white-text" href="#">Documentation</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright grey darken-4">
+      <div class="container">
+      Made by <a class="grey-text text-lighten-3" href="https://github.com/D34DPlayer">Carlos Ruiz</a>
+      </div>
+    </div>
+</footer>
+
+<!-- JavaScript -->
+{% block js %}
+
+{% endblock %}
+<script type="text/javascript" src="{% static "MuziekDL/js/materialize.min.js" %}"></script>
+</body>
+</html>

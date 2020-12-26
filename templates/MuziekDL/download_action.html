@@ -1,0 +1,93 @@
+{%  extends 'MuziekDL/default_template.html' %}
+
+{% block content %}
+    <div class="section">
+        <div class="container">
+            <h4 class="header center"> Info: </h4>
+            <div class="row">
+                Title: {{ entry.track_title }}
+            </div>
+            <div class="row">
+                Album: {{ entry.album }}
+            </div>
+            <div class="row">
+                Genre: {{ entry.genre }}
+            </div>
+            <div class="row">
+                Artwork: {{ entry.artwork_url }}
+            </div>
+            <div class="row">
+                <div class="col s6">
+                    Track number: {{ entry.track_number }}
+                </div>
+                <div class="col s6">
+                    Track number: {{ entry.track_number }}
+                </div>
+            </div>
+            <div class="row">
+                Year of release: {{ entry.year }}
+            </div>
+            <div class="row center">
+                <button class="waves-effect waves-light btn-large" onclick="startDownload();" id="start">Start download</button>
+                <button class="waves-effect waves-light btn-large" disabled onclick="download();" id="download">Download file</button>
+            </div>
+            <div class="progress" id="progress">
+                <div class="indeterminate"></div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        async function ajaxQuery() {
+            let req = await fetch("{% url "ajax_status" entry.id %}");
+            let info = await req.json();
+
+            if (info.success === 1) {
+                switch (info.dl_status) {
+                    case 1 :
+                        document.getElementById("start").disabled = true;
+                        document.getElementById("start").innerHTML = "Processing...";
+                        document.getElementById("progress").style.display = "block";
+                        break;
+                    case -1:
+                        document.getElementById("start").disabled = true;
+                        document.getElementById("start").innerHTML = "ERROR";
+                        document.getElementById("progress").style.display = "none";
+                        return;
+                    case 2:
+                        document.getElementById("start").disabled = true;
+                        document.getElementById("start").innerHTML = "DONE";
+                        document.getElementById("download").disabled = false;
+                        document.getElementById("progress").style.display = "none";
+                        return;
+                    case 0:
+                        document.getElementById("start").disabled = false;
+                        document.getElementById("start").innerHTML = "Start download";
+                        break;
+                }
+                setTimeout(ajaxQuery, 3000);
+            }
+        }
+        async function startDownload() {
+            let req = await fetch("{% url "ajax_start_download" entry.id %}");
+            let info = await req.json();
+            if (!info.success) {
+                document.getElementById("start").disabled = true;
+                document.getElementById("start").innerHTML = "ERROR";
+            }
+        }
+        function download() {
+            let anchor = document.createElement('a');
+            anchor.href = "{% url "ajax_download" entry.id %}";
+            anchor.target = '_blank';
+            anchor.download = "{{ entry.id }}.mp3";
+            anchor.click();
+        }
+        ajaxQuery();
+        document.getElementById("progress").style.display = "none";
+    </script>
+{% endblock %}

@@ -1,0 +1,22 @@
+{%  extends 'MuziekDL/default_template.html' %}
+
+{% block content %}
+    <div class="section">
+        <div class="container">
+            {% if entry_list %}
+                <ul class="collection with-header">
+                    <li class="collection-header"><h4>Search results:</h4></li>
+                    {% for entry in entry_list %}
+                        <li class="collection-item">
+                            <a href="{% url 'form_id' entry.id %}">
+                                {{ entry }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <h4 class="header center">No song matches your query.</h4>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
