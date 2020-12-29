@@ -1,0 +1,39 @@
+{
+  "name": "MuziekDownloader",
+  "description": "A web app to download YouTube songs the right way.",
+  "repository": "https://github.com/D34DPlayer/MuziekDownloader",
+  "keywords": ["node", "express", "static"],
+  "scripts": {
+    "release": "python manage.py migrate"
+  },
+  "env": {
+    "SECRET_KEY": {
+      "description": "A secret key for Django.",
+      "generator": "secret"
+    },
+    "HEROKU": {
+      "description": "Tell the app it's being hosted on Heroku.",
+      "value": "1"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    }
+  },
+  "image": "heroku/python",
+  "addons": [
+    {
+      "plan": "heroku-postgresql:hobby-dev"
+    }
+  ],
+  "buildpacks": [
+    {
+      "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
+    },
+    {
+      "url": "heroku/python"
+    }
+  ]
+}
